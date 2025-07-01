@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Telxon Tracker</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .log {
+      margin-top: 20px;
+      background: #eaeaea;
+      padding: 10px;
+      height: 150px;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Telxon Tracker App</h2>
+
+    <label for="name">Associate Name:</label>
+    <input type="text" id="name" placeholder="Enter your name" />
+
+    <label for="device">Telxon Device:</label>
+    <select id="device">
+      <option value="">Select</option>
+      <option value="1">Telxon 1</option>
+      <option value="2">Telxon 2</option>
+      <option value="3">Telxon 3</option>
+      <option value="4">Telxon 4</option>
+      <option value="5">Telxon 5</option>
+      <option value="6">Telxon 6</option>
+      <option value="7">Telxon 7</option>
+      <option value="8">Telxon 8</option>
+      <option value="9">Telxon 9</option>
+      <option value="10">Telxon 10</option>
+    </select>
+
+    <label>Action:</label>
+    <input type="radio" name="action" value="Borrowed" /> Borrowed
+    <input type="radio" name="action" value="Returned" /> Returned
+
+    <button onclick="submitEntry()">Submit</button>
+    <button onclick="clearLog()" style="margin-top:10px; background-color: red; color: white;">Clear All Entries</button>
+
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    // Load saved log entries when page opens
+    window.onload = function () {
+      const savedLog = localStorage.getItem('telxonLog');
+      if (savedLog) {
+        document.getElementById('log').innerHTML = savedLog;
+      }
+    }
+  
+    function submitEntry() {
+      const name = document.getElementById('name').value;
+      const device = document.getElementById('device').value;
+      const action = document.querySelector('input[name="action"]:checked');
+      const log = document.getElementById('log');
+  
+      if (!name || !device || !action) {
+        alert("Please fill in all fields.");
+        return;
+      }
+  
+      const time = new Date().toLocaleTimeString();
+      const entry = `${name} | Telxon ${device} | ${action.value} | ${time}<br>`;
+      log.innerHTML += entry;
+  
+      // Save the log to browser storage
+      localStorage.setItem('telxonLog', log.innerHTML);
+  
+      // Clear inputs
+      document.getElementById('name').value = '';
+      document.getElementById('device').value = '';
+      action.checked = false;
+    }
+    function clearLog() {
+  if (confirm("Are you sure you want to clear all entries?")) {
+    document.getElementById('log').innerHTML = '';
+    localStorage.removeItem('telxonLog');
+  }
+}
+
+  </script>
+  
+</body>
+</html>
